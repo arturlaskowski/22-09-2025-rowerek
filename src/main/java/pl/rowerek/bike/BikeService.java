@@ -3,6 +3,7 @@ package pl.rowerek.bike;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.rowerek.bike.dto.BikeCreatedEvent;
 import pl.rowerek.bike.dto.BikeDto;
 import pl.rowerek.bike.dto.CreateBikeDto;
@@ -16,6 +17,7 @@ public class BikeService {
     private final BikeRepository bikeRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @Transactional(readOnly = true)
     public BikeDto getBike(BikeId id) {
         return bikeRepository.findById(id)
                 .map(bike -> new BikeDto(id, bike.getModel(), bike.getColor()))
@@ -30,6 +32,7 @@ public class BikeService {
         return bikeId;
     }
 
+    @Transactional(readOnly = true)
     public void checkBikeExists(BikeId id) {
         if (!bikeRepository.existsById(id)) {
             throw new BikeNotFoundException(id);

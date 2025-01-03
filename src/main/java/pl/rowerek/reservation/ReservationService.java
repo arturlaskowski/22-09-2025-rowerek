@@ -2,6 +2,7 @@ package pl.rowerek.reservation;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.rowerek.availability.BikeAvailabilityService;
 import pl.rowerek.common.BikeId;
 import pl.rowerek.common.CustomerId;
@@ -19,7 +20,8 @@ public class ReservationService {
     private final CustomerService customerService;
     private final BikeAvailabilityService bikeAvailabilityService;
 
-    ReservationId reserve(BikeId bikeId, CustomerId customerId, Instant when) {
+    @Transactional
+    public ReservationId reserve(BikeId bikeId, CustomerId customerId, Instant when) {
         customerService.checkCustomerExists(customerId);
 
         bikeAvailabilityService.takeBike

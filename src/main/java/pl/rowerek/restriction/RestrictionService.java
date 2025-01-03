@@ -2,6 +2,7 @@ package pl.rowerek.restriction;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.rowerek.availability.BikeAvailabilityService;
 import pl.rowerek.restriction.dto.CreateRestrictionDto;
 
@@ -14,6 +15,7 @@ public class RestrictionService {
     private final RestrictionRepository restrictionRepository;
     private final BikeAvailabilityService bikeAvailabilityService;
 
+    @Transactional
     public RestrictionId addRestriction(CreateRestrictionDto createDto) {
         bikeAvailabilityService.takeBike
                 (createDto.bikeId(), Instant.now(), createDto.to(), "Restriction");

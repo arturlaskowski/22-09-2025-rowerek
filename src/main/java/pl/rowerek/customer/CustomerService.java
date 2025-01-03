@@ -2,6 +2,7 @@ package pl.rowerek.customer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.rowerek.common.CustomerId;
 import pl.rowerek.common.CustomerNotFoundException;
 import pl.rowerek.customer.dto.CreateCustomerDto;
@@ -13,6 +14,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
+    @Transactional(readOnly = true)
     public CustomerDto getCustomer(CustomerId customerId) {
         return customerRepository.findById(customerId)
                 .map(customer -> new CustomerDto(customer.getId().id(), customer.getFirstName(), customer.getLastName()))
@@ -24,6 +26,7 @@ public class CustomerService {
         return customerRepository.save(customer).getId();
     }
 
+    @Transactional(readOnly = true)
     public void checkCustomerExists(CustomerId id) {
         if (!customerRepository.existsById(id)) {
             throw new CustomerNotFoundException(id);
